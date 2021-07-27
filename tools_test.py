@@ -436,8 +436,8 @@ def preprocess():
     
     tree.write('dcd_clips/labels_xml/1.xml')
 
-#tree = ET.parse('dcd_clips/labels_xml/1.xml')
-#root = tree.getroot()
+tree = ET.parse('dcd_clips/labels_xml/1.xml')
+root = tree.getroot()
 #preprocess()
 
 def displayable_Element( tree, element, is_last ):
