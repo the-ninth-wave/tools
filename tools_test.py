@@ -1,3 +1,12 @@
+#
+## imports
+#
+import os
+import re
+from bs4 import BeautifulSoup # Beautiful Soup
+from pathlib import Path
+import xml.etree.ElementTree as ET
+
 def test():
     print("Hello world")
     
