@@ -416,6 +416,21 @@ both attributes are strings, but on use are cast as `int` and `Bool` respectivel
 
 """
 
+def preprocess():
+    # record depth attribute
+    tree = ET.parse('dcd_clips/labels_xml/1.xml')
+    root = tree.getroot()
+    tree = depth_record(tree)
+    # record is_last attribute
+    tree = last_record(tree)
+    root = tree.getroot()
+    
+    tree.write('dcd_clips/labels_xml/1.xml')
+
+#tree = ET.parse('dcd_clips/labels_xml/1.xml')
+#root = tree.getroot()
+#preprocess()
+
 def displayable_Element( tree, element, is_last ):
     boo = bool(is_last)
     
