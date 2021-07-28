@@ -213,7 +213,7 @@ def display_xml(path):
     
     for i in root.iter():
         s = displayable_Element(path, i, i.attrib['is_last'])
-        print(s + ' :  ' + element.text)
+        print(s + ' :  ' + i.text)
         
 """
                        Helper functions 
