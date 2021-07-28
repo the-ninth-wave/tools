@@ -2,17 +2,27 @@
 ## imports
 #
 import os
+
 import re
+
 from pathlib import Path
+
 from bs4 import BeautifulSoup
+
 import xml.etree.ElementTree as ET
+
 import collections, itertools
+
 import numpy as np
+
 import torch
-import torchvision
-from PIL import Image
 import torch.utils.data
+import torchvision
+
+from PIL import Image
+
 from matplotlib import pyplot as plt
+
 import cv2
 # import utils
 # import transforms as T
@@ -427,7 +437,7 @@ import os
 import numpy as np
 import torch
 from PIL import Image
-import torch.utils.dat
+import torch.utils.data
 """
 
 class dcd(torch.utils.data.Dataset):
@@ -460,19 +470,19 @@ class dcd(torch.utils.data.Dataset):
 
         image_path = os.path.join(
             self.root_dir, 
-            "dcd_clips/images",
+            "dcd_clips/images/",
             self.images[index]
             )
         
         labels_csv_path = os.path.join(
             self.root_dir, 
-            "dcd_clips/labels_csv",
+            "dcd_clips/labels_csv/",
             self.labels_csv[index]
             )
         
         labels_xml_path = os.path.join(
             self.root_dir,
-            "dcd_clips/labels_xml",
+            "dcd_clips/labels_xml/",
             self.labels_xml[index]
         )
         
