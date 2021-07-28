@@ -38,6 +38,11 @@ parent_prefix_middle = '    '
 parent_prefix_last = '│   '
 
 class DisplayablePath(object):
+    
+    element_prefix_middle = '├──'
+    element_prefix_last = '└──'
+    parent_prefix_middle = '    '
+    parent_prefix_last = '│   '
 
     # initialize
     def __init__(self, path, parent_path, is_last):
