@@ -518,6 +518,7 @@ class dcd(torch.utils.data.Dataset):
         return image, target, image_cv2 
     
     # uses cv2 module / library
+    @classmethod
     def display_image_and_target(self,index):
         
         image, target, copy = getitem(index)
