@@ -442,38 +442,63 @@ import torch.utils.data
 
 class dcd(torch.utils.data.Dataset):
 
-    def __init__(self, root_dir, transforms):
+    def __init__(self, root_dir, transforms, mac):
 
         self.root_dir = root_dir
 
         self.transforms = transforms
+        
+        self.mac = bool(mac)
 
-        self.images = list(
+        self.images_full = list(
             sorted(
                 os.listdir(
                     os.path.join(
                         root_dir,"dcd_clips/images/"))))
 
-        self.labels_csv = list(
+        self.labels_csv_full = list(
             sorted(
                 os.listdir(
                     os.path.join(
                         root_dir,"dcd_clips/labels_csv/"))))
 
-        self.labels_xml = list(
+        self.labels_xml_full = list(
             sorted(
                 os.listdir(
                     os.path.join(
                         root_dir,"dcd_clips/labels_xml/"))))
+        # recall:
+        #
+        # regex_raw_all = r"[/][.]|/_|Icon"
+        # regex_all = re.compile(regex_raw_all)
         
-        self.image_len = len(self.images)
+        self.images_mac = [i for i in self.images_full if not regex_all.search(i)]
+
+        self.labels_csv_mac = [i for i in self.labels_csv_full if not regex_all.search(i)]
+
+        self.labels_xml_mac = [i for i in self.labels_xml_full if not regex_all.search(i)]
+        
+        if self.mac:
+            
+            self.images = self.images_mac
+            self.labels_csv = self.labels_csv_mac
+            self.labels_csv = self.labels_xml_mac
+            
+        else:
+            
+            self.images = self.images_full
+            self.labels_csv = self.labels_csv_full
+            self.labels_csv = self.labels_xmlfull
+        
+        
+        self.images_len = len(self.images)
         
         self.labels_csv_len = len(self.labels_csv)
         
         self.labels_xml_len = len(self.labels_xml)
         
     def __len__(self):
-        return(self.image_len)
+        return(self.images_len)
 
     def __getitem__(self, index):
 
