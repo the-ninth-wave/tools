@@ -212,7 +212,7 @@ def display_xml(path):
     root = tree.getroot()
     
     for i in root.iter():
-        s = displayable_Element(tree, i, i.attrib['is_last'])
+        s = displayable_Element(path, i, i.attrib['is_last'])
         print(s + ' :  ' + element.text)
         
 """
