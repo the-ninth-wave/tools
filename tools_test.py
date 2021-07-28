@@ -465,6 +465,15 @@ class dcd(torch.utils.data.Dataset):
                 os.listdir(
                     os.path.join(
                         root_dir,"dcd_clips/labels_xml/"))))
+        
+        self.image_len = len(self.images)
+        
+        self.labels_csv_len = len(self.labels_csv)
+        
+        self.labels_xml_len = len(self.labels_xml)
+        
+    def __len__(self):
+        return(self.image_len)
 
     def __getitem__(self, index):
 
