@@ -482,13 +482,13 @@ class dcd(torch.utils.data.Dataset):
             
             self.images = self.images_mac
             self.labels_csv = self.labels_csv_mac
-            self.labels_csv = self.labels_xml_mac
+            self.labels_xml = self.labels_xml_mac
             
         else:
             
             self.images = self.images_full
             self.labels_csv = self.labels_csv_full
-            self.labels_csv = self.labels_xmlfull
+            self.labels_xml = self.labels_xml_full
         
         
         self.images_len = len(self.images)
