@@ -489,10 +489,13 @@ class dcd(torch.utils.data.Dataset):
 
         self.labels_csv = list(
             sorted( os.listdir( self.labels_csv_path ))
+        )
 
 
         self.labels_xml = list(
             sorted( os.listdir( self.labels_xml_path ))
+        )
+        
         # recall:
         #
         # regex_raw_all = r"[/][.]|/_|Icon"
