@@ -440,6 +440,8 @@ from PIL import Image
 import torch.utils.data
 """
 
+from glob import glob
+
 class dcd(torch.utils.data.Dataset):
 
     def __init__(self, root_dir, transforms, mac):
@@ -449,46 +451,52 @@ class dcd(torch.utils.data.Dataset):
         self.transforms = transforms
         
         self.mac = bool(mac)
+        
+        self.images_path = os.path.join(
+            self.root_dir, 
+            "dcd_clips/images/"
+            )
+        
+        self.labels_csv_path = os.path.join(
+            self.root_dir, 
+            "dcd_clips/labels_csv/"
+            )
+        
+        self.labels_xml_path = os.path.join(
+            self.root_dir, 
+            "dcd_clips/labels_xml/"
+            )
+        
+        if self.mac:
+            for file in glob( self.images_path ):
+                if regex_all.search(str(file)):
+                    os.remove(file)
+                    
+            for file in glob( self.labels_csv_path ):
+                if regex_all.search(str(file)):
+                    os.remove(file)
+            
+            for file in glob( self.labels_xml_path ):
+                if regex_all.search(str(file)):
+                    os.remove(file)
+                    
+        
+        
 
-        self.images_full = list(
-            sorted(
-                os.listdir(
-                    os.path.join(
-                        root_dir,"dcd_clips/images/"))))
+        self.images = list(
+            sorted( os.listdir( self.images_path ))
+        )
 
-        self.labels_csv_full = list(
-            sorted(
-                os.listdir(
-                    os.path.join(
-                        root_dir,"dcd_clips/labels_csv/"))))
+        self.labels_csv = list(
+            sorted( os.listdir( self.labels_csv_path ))
 
-        self.labels_xml_full = list(
-            sorted(
-                os.listdir(
-                    os.path.join(
-                        root_dir,"dcd_clips/labels_xml/"))))
+
+        self.labels_xml = list(
+            sorted( os.listdir( self.labels_xml_path ))
         # recall:
         #
         # regex_raw_all = r"[/][.]|/_|Icon"
         # regex_all = re.compile(regex_raw_all)
-        
-        self.images_mac = [i for i in self.images_full if not regex_all.search(i)]
-
-        self.labels_csv_mac = [i for i in self.labels_csv_full if not regex_all.search(i)]
-
-        self.labels_xml_mac = [i for i in self.labels_xml_full if not regex_all.search(i)]
-        
-        if self.mac:
-            
-            self.images = self.images_mac
-            self.labels_csv = self.labels_csv_mac
-            self.labels_xml = self.labels_xml_mac
-            
-        else:
-            
-            self.images = self.images_full
-            self.labels_csv = self.labels_csv_full
-            self.labels_xml = self.labels_xml_full
         
         
         self.images_len = len(self.images)
@@ -502,27 +510,24 @@ class dcd(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
 
-        image_path = os.path.join(
-            self.root_dir, 
-            "dcd_clips/images/",
+        item_images_path = os.path.join(
+            self.images_path,
             self.images[index]
             )
         
-        labels_csv_path = os.path.join(
-            self.root_dir, 
-            "dcd_clips/labels_csv/",
+        item_labels_csv_path = os.path.join(
+            self.labels_csv_path,
             self.labels_csv[index]
             )
         
-        labels_xml_path = os.path.join(
-            self.root_dir,
-            "dcd_clips/labels_xml/",
+        item_labels_xml_path = os.path.join(
+            self.labels_xml_path,
             self.labels_xml[index]
         )
         
         # 
-        image = Image.open(image_path).convert("RGB")
-        image_cv2 = cv2.imread(image_path)
+        image = Image.open(item_images_path).convert("RGB")
+        image_cv2 = cv2.imread(item_images_path)
         
         """
         A little sloppy here: instead of returning
@@ -534,7 +539,7 @@ class dcd(torch.utils.data.Dataset):
         function we build below. 
         """
 
-        xml = ET.parse(labels_xml_path)
+        xml = ET.parse(item_labels_xml_path)
         xml_root = xml.getroot()
 
         xmin = xml_root.find("./object/bndbox/xmin").text
