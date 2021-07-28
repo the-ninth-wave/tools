@@ -282,6 +282,8 @@ def last_record(tree):
 # ( key, value ) pairs. 
 #
 def parent(tree, element):
+    
+    root = tree.getroot()
 
     parent_map = {c:p for p in tree.iter() for c in p}
 
