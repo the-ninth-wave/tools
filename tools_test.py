@@ -9,10 +9,13 @@ import xml.etree.ElementTree as ET
 import collections, itertools
 import numpy as np
 import torch
+import torchvision
 from PIL import Image
 import torch.utils.dat
 from matplotlib import pyplot as plt
 import cv2
+import utils
+import transforms as T
 
 
 ####################################################
@@ -546,3 +549,23 @@ class dcd(torch.utils.data.Dataset):
 
         plt.show()
         
+"""
+                Helper: get_transform
+reqs:
+
+from engine import train_one_epoch, evaluate ??
+import utils
+import transforms as T
+"""
+
+
+def get_transform(train):
+    transforms = []
+    # converts the image, a PIL image, into a PyTorch Tensor
+    transforms.append(T.ToTensor())
+    if train:
+        # during training, randomly flip the training images
+        # and ground truth for data augmentation
+        # transforms.append(T.RandomHorizontalFlip(0.5))
+    return T.Compose(transforms)
+   
