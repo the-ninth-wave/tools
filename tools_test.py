@@ -452,19 +452,19 @@ class dcd(torch.utils.data.Dataset):
             sorted(
                 os.listdir(
                     os.path.join(
-                        root_dir,"dcd_clips/images/"))))
+                        root_dir,"/images/"))))
 
         self.labels_csv = list(
             sorted(
                 os.listdir(
                     os.path.join(
-                        root_dir,"dcd_clips/labels_csv/"))))
+                        root_dir,"/labels_csv/"))))
 
         self.labels_xml = list(
             sorted(
                 os.listdir(
                     os.path.join(
-                        root_dir,"dcd_clips/labels_xml/"))))
+                        root_dir,"/labels_xml/"))))
 
     def __getitem__(self, index):
 
