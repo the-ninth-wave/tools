@@ -11,7 +11,7 @@ import numpy as np
 import torch
 import torchvision
 from PIL import Image
-import torch.utils.dat
+import torch.utils.data
 from matplotlib import pyplot as plt
 import cv2
 import utils
