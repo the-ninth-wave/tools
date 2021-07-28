@@ -7,6 +7,12 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import xml.etree.ElementTree as ET
 import collections, itertools
+import numpy as np
+import torch
+from PIL import Image
+import torch.utils.dat
+from matplotlib import pyplot as plt
+import cv2
 
 
 ####################################################
@@ -19,11 +25,8 @@ import collections, itertools
 
 Modifying code from: 
 
-https://stackoverflow.com/
-questions/9727673/list-directory-tree-structure-in-python
+https://stackoverflow.com/questions/9727673/list-directory-tree-structure-in-python
 
-"""
-"""
 The following regex describes the pattern 
 we want to use as a criterion for omitting
 the listing 
@@ -79,7 +82,7 @@ class DisplayablePath(object):
         
         root = Path(str(root))   #  init class object for root
         displayable_root = cls(root, parent, is_last)
-        yield displayable_root        #   yield functions as "return"
+        yield displayable_root        #   yield \approx "return"
         
         """
         #   'criteria' allows us to filter what's displayed
@@ -386,3 +389,160 @@ def displayable_Element(path, element, is_last):
         ancestor = parent(tree, ancestor)
         
     return ''.join(reversed(parts))
+
+####################################################
+####################################################
+"""
+                               Part III
+                               
+            ( custom dataset class, display methods )
+
+
+
+Sources:
+
+* https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html
+
+* https://stackoverflow.com/questions/13887863/extract-bounding-box-and-save-it-as-an-image#13887948
+
+* https://danielcorcoranssql.wordpress.com/2019/04/01/cv2detecting-contours/
+
+* https://pypi.org/project/cv2-tools/
+
+
+
+"""
+
+# semicolon suppresses output in jupyter 
+
+#######
+
+"""
+reqs:
+
+import os
+import numpy as np
+import torch
+from PIL import Image
+import torch.utils.dat
+"""
+
+class dcd(torch.utils.data.Dataset):
+
+    def __init__(self, root_dir, transforms):
+
+        self.root_dir = root_dir
+
+        self.transforms = transforms
+
+        self.images = list(
+            sorted(
+                os.listdir(
+                    os.path.join(
+                        root_dir,"dcd_clips/images/"))))
+
+        self.labels_csv = list(
+            sorted(
+                os.listdir(
+                    os.path.join(
+                        root_dir,"dcd_clips/labels_csv/"))))
+
+        self.labels_xml = list(
+            sorted(
+                os.listdir(
+                    os.path.join(
+                        root_dir,"dcd_clips/labels_xml/"))))
+
+    def __getitem__(self, index):
+
+        image_path = os.path.join(
+            self.root_dir, 
+            "dcd_clips/images",
+            self.images[index]
+            )
+        
+        labels_csv_path = os.path.join(
+            self.root_dir, 
+            "dcd_clips/labels_csv",
+            self.labels_csv[index]
+            )
+        
+        labels_xml_path = os.path.join(
+            self.root_dir,
+            "dcd_clips/labels_xml",
+            self.labels_xml[index]
+        )
+        
+        # 
+        image = Image.open(image_path).convert("RGB")
+        image_cv2 = cv2.imread(image_path)
+        
+        """
+        A little sloppy here: instead of returning
+        two objects, image target pair, which i feel is natural
+        I will also return a copy of the image read by
+        the cv2 library.
+        
+        This is to be able to annotate in the display 
+        function we build below. 
+        """
+
+        xml = ET.parse(labels_xml_path)
+        xml_root = xml.getroot()
+
+        xmin = xml_root.find("./object/bndbox/xmin").text
+        ymin = xml_root.find("./object/bndbox/ymin").text
+        xmax = xml_root.find("./object/bndbox/xmax").text
+        ymax = xml_root.find("./object/bndbox/ymax").text
+
+        # The x and y coordinates are those (of four possible corners)
+        # chosen earliest in lexicographical order
+        x = int(xmin)
+        y = int(ymin)
+        w = int(xmax) - x
+        h = int(ymax) - y
+
+        b = [ x, y, w, h ]
+
+        boxes = []
+        boxes.append(b)
+
+        boxes = torch.as_tensor(boxes, dtype = torch.float32)
+                                
+        target = {}
+        target["boxes"] = boxes
+
+        return image, target, image_cv2 
+    
+    # uses cv2 module / library
+    def display_image_and_target(self,index):
+        
+        image, target, copy = getitem(index)
+        
+        # so far, only display first box
+        b = target["boxes"][0]
+        cv2.rectangle(copy, 
+                      (b[0], b[1]), 
+                      (b[0]+b[2], b[1]+b[3]), 
+                      (0, 255, 0), 
+                      2)
+
+        
+        # figure
+        fig = plt.figure( figsize = (10,10) )
+        f_rows = 1 #    formatting 
+        f_cols = 2 #    
+
+
+        fig.add_subplot( f_rows, f_cols, 1 ) # 1st subplot
+        plt.imshow(image1_np)
+        plt.tick_params(left=False,bottom=False)
+        plt.axis('off')
+
+        fig.add_subplot( f_rows, f_cols, 2 ) # 2nd subplot
+        plt.imshow(copy)
+        plt.tick_params(left=False,bottom=False)
+        plt.axis('off')
+
+        plt.show()
+        
