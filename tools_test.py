@@ -567,7 +567,7 @@ class dcd(torch.utils.data.Dataset):
         target = {}
         target["boxes"] = boxes
 
-        return image, target, image_cv2 
+        return numpy.array(image), target, image_cv2 
     
     # uses cv2 module / library
     @classmethod
@@ -591,7 +591,7 @@ class dcd(torch.utils.data.Dataset):
 
 
         fig.add_subplot( f_rows, f_cols, 1 ) # 1st subplot
-        plt.imshow(image1_np)
+        plt.imshow(image)
         plt.tick_params(left=False,bottom=False)
         plt.axis('off')
 
