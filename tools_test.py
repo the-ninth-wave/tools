@@ -27,6 +27,13 @@ import cv2
 # import utils
 # import transforms as T
 
+from zipfile import ZipFile
+from shutil import copy
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+from google.colab import auth
+from oauth2client.client import GoogleCredentials
+
 
 ####################################################
 ####################################################
@@ -621,4 +628,50 @@ import transforms as T
         # and ground truth for data augmentation
         # transforms.append(T.RandomHorizontalFlip(0.5))
     # return T.Compose(transforms)
+    
+####################################################
+####################################################
+"""
+                               Part IV
+                               
+            ( getting zip file from google drive )
+
+
+uses:
+
+from zipfile import ZipFile
+from shutil import copy
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+from google.colab import auth
+from oauth2client.client import GoogleCredentials
+
+
+
+"""
+
+def drive_retrieve(fileId):
+    # get access
+    auth.authenticate_user()
+    gauth = GoogleAuth()
+    gauth.credentials = GoogleCredentials.get_application_default()
+    drive = GoogleDrive(gauth)
+
+    # file name
+    fileName = fileId + '.zip'
+
+    # request, download??
+    downloaded = drive.CreateFile({'id': fileId})
+    downloaded.GetContentFile(fileName)
+
+    # feed into ZipFile library
+    ds = ZipFile(fileName)
+
+    # extract
+    ds.extractall()
+    
+    # now that it's been extracted, remove the zip file
+    os.remove( fileName )
+    print( 'Extracted zip file ' + fileName + '\n' )
+    
    
