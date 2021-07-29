@@ -567,7 +567,7 @@ class dcd(torch.utils.data.Dataset):
         target = {}
         target["boxes"] = boxes
 
-        return numpy.array(image), target, image_cv2 
+        return np.array(image), target, image_cv2 
     
     # uses cv2 module / library
     @classmethod
