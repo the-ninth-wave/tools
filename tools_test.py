@@ -654,7 +654,6 @@ def drive_retrieve(fileId):
     # get access
     auth.authenticate_user()
     gauth = GoogleAuth()
-    gauth.credentials = GoogleCredentials.get_application_default()
     drive = GoogleDrive(gauth)
 
     # file name
