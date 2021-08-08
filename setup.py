@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name = 'tools',
+    name = 'src',
     where = '.',
     version = '0.0.1',
     packages = ['tools'],
