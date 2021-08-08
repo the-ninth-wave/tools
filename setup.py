@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name = 'src',
-    where = '.',
+    name = 'tools',
+    where = 'src',
     version = '0.0.1',
     packages = ['tools'],
     install_requires = [
