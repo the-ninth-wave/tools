@@ -3,6 +3,7 @@ from setuptools import find_packages
 from setuptools import find_namespace_packages
 
 setup(
+    name = 'tools',
     # ...
     packages = find_packages(
         where = 'src',
