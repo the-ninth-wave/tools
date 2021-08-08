@@ -6,7 +6,7 @@ setup(
     # ...
     packages = find_packages(
         where = 'src',
-        include = 'tools*'],
+        include = ['tools*'],
     ),
     package_dir = {"":"src"}
     # ...
