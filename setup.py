@@ -2,6 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'tools',
+    where = '.'
     version = '0.0.1',
     packages = ['tools']
     install_requires[
