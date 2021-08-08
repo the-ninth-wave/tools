@@ -5,7 +5,7 @@ from setuptools import find_namespace_packages
 setup(
     name = 'tools',
     # ...
-    packages = find_packages(
+    packages = find_namespace_packages(
         where = 'src',
     ),
     package_dir = {"":"src"}
