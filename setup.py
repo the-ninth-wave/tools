@@ -1,16 +1,13 @@
 from setuptools import setup
+from setuptools import find_packages
+from setuptools import find_namespace_packages
 
 setup(
-    name = 'tools',
-    where = 'src',
-    version = '0.0.1',
-    packages = ['tools'],
-    install_requires = [
-        'requests',
-        'importlib; python_version >= "3.0"',
-    ],
+    # ...
+    packages = find_packages(
+        where = 'src',
+        include = 'tools*'],
+    )
+    package_dir = {"":"src"}
+    # ...
 )
-
-
-#from . import tools_test
-#from . import tools_test_drive
