@@ -5,7 +5,7 @@ setup(
     where = '.',
     version = '0.0.1',
     packages = ['tools'],
-    install_requires[
+    install_requires = [
         'requests',
         'importlib; python_version >= "3.0"',
     ],
